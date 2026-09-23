@@ -255,6 +255,10 @@ public final class Msa {
             d = cut > 0 ? d.substring(0, cut) : d;
          }
       }
+      if (d != null && d.contains("AADSTS70002")) {
+         return "the launcher's Microsoft app doesn't allow this kind of sign-in yet (\"Allow public client flows\" is "
+            + "off in its Azure app registration)";
+      }
       if ("unauthorized_client".equals(e) || "invalid_client".equals(e)) {
          return "this launcher's Microsoft app ID isn't valid (" + (d == null ? e : d) + ")";
       }
