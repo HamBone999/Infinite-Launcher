@@ -1,0 +1,11 @@
+#!/bin/sh
+# Starts the launcher on the Java 8 bundled for this Mac's chip: Azul Zulu on Apple Silicon,
+# Eclipse Temurin on Intel. The game then runs on the same Java.
+RES="$(cd "$(dirname "$0")/../Resources" && pwd)"
+if [ "$(sysctl -n hw.optional.arm64 2>/dev/null)" = "1" ] && [ -x "$RES/jre-arm64/bin/java" ]; then
+   JAVA="$RES/jre-arm64/bin/java"
+else
+   JAVA="$RES/jre-x64/bin/java"
+fi
+exec "$JAVA" -Xdock:name="Infinite Launcher" -Xdock:icon="$RES/icon-512.png" \
+   -Dapple.awt.application.name="Infinite Launcher" -jar "$RES/InfiniteLauncher.jar" "$@"

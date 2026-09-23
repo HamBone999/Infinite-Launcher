@@ -1,0 +1,24 @@
+#!/bin/sh
+# Infinite Launcher for Linux and the Steam Deck.
+#   ./infinite-launcher             start it
+#   ./infinite-launcher --install   also add it to your application menu
+HERE="$(cd "$(dirname "$0")" && pwd)"
+JAVA="$HERE/runtime/bin/java"
+[ -x "$JAVA" ] || JAVA="$(command -v java)"
+if [ "${1:-}" = "--install" ]; then
+   shift
+   APPS="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+   mkdir -p "$APPS"
+   cat > "$APPS/infinite-launcher.desktop" <<DESKTOP
+[Desktop Entry]
+Type=Application
+Name=Infinite Launcher
+Comment=Minecraft Infinite Reborn
+Exec="$HERE/infinite-launcher"
+Icon=$HERE/icon.png
+Terminal=false
+Categories=Game;
+DESKTOP
+   echo "Added Infinite Launcher to the application menu."
+fi
+exec "$JAVA" -jar "$HERE/InfiniteLauncher.jar" "$@"
