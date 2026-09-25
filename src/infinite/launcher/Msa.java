@@ -24,6 +24,7 @@ public final class Msa {
       public final String deviceCode;
       public final String userCode;
       public final String verificationUri;
+      public final String verificationUriComplete;
       public final long expiresAt;
       public int interval;
 
@@ -32,13 +33,24 @@ public final class Msa {
          userCode = Json.str(m, "user_code");
          String uri = Json.str(m, "verification_uri");
          verificationUri = uri == null ? "https://www.microsoft.com/link" : uri;
+         // Microsoft's own pre-filled URL. When present it already carries the code; when it is
+         // not (the consumers endpoint currently omits it for this flow), there is no pre-fill.
+         verificationUriComplete = Json.str(m, "verification_uri_complete");
          expiresAt = System.currentTimeMillis() + Json.num(m, "expires_in", 900) * 1000L;
          interval = (int)Math.max(1, Json.num(m, "interval", 5));
       }
 
-      /** microsoft.com/link accepts the code pre-filled. */
+      /**
+       * The page to open. Use Microsoft's pre-filled URL when it hands one back; otherwise open
+       * the verification_uri EXACTLY as returned and let the player paste the code (the dialog
+       * copies it on open). The old build appended "?otc=" + userCode to www.microsoft.com/link,
+       * which Microsoft never sends -- that fabricated query lands on a dead page instead of the
+       * code-entry page, which is why the button "went to an unresolved page".
+       */
       public String browserUrl() {
-         return verificationUri.contains("microsoft.com/link") ? verificationUri + "?otc=" + userCode : verificationUri;
+         return verificationUriComplete != null && !verificationUriComplete.isEmpty()
+            ? verificationUriComplete
+            : verificationUri;
       }
    }
 
