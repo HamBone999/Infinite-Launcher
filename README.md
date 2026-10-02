@@ -113,4 +113,4 @@ endorsed by, or associated with either of them.
 
 Minecraft Infinite Reborn is an independent, fan-made project. It is **not** official L+, and it is **not** an endorsed or official continuation of that project. Infinite Reborn is not affiliated with, endorsed by, or supported by Method/Yoniko or the original L+ team — all credit for the original L+ work belongs to them.
 
-Some of the tools and code used to build this project were created with the help of AI.
+Some of the tools and code used to build this project were created with the help of local AI.
